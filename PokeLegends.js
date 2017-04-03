@@ -39,7 +39,7 @@
                         var hp = txt.split('Health: ')[1].split(' / ');
                         pokemon.hp = parseInt(hp[0]);
                         pokemon.max_hp = parseInt(hp[1]);
-                        pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp) * 100 + '%';
+                        pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
                     }
                 }
             });
