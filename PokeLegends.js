@@ -1,8 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends HP
 // @namespace    https://halfcrap.com
-// @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_HP.meta.js
-// @version      0.1
+// @version      0.2
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
@@ -44,7 +43,10 @@
             // Update pokemon slot
             $('#'+slot).replaceWith(
                 '<div class="pokemon" id="'+slot+'">'+
+                '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
+                '<a href="' + link + '" target="_blank">'+
                 '<img src="'+img.attr('src')+'">'+
+                '</a>'+
                 '<div class=pokemon-hp>' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
                 '</div>'
             );
