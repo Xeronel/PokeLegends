@@ -71,7 +71,7 @@ div#mws-sidebar-stitch {
 #divPm {
     position: absolute;
     width: 18.5% !important;
-    margin-top: 175px;
+    margin-top: 230px;
 }
 
 #divPm > div.mws-panel.grid_2 {
@@ -90,9 +90,18 @@ div#mws-sidebar-stitch {
     width: 33.33%;
 }
 
-.pokemon > img,
+.pokemon-name,
+.pokemon > a,
 .pokemon-hp {
     display: table;
     margin: 0 auto;
+}
+
+.pokemon > a {
+    height: 62px;
+}
+
+.pokemon-name {
+    padding-bottom: 1px;
 }
 }
