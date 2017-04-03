@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends HP
 // @namespace    https://halfcrap.com
-// @version      0.2
+// @version      0.3
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
