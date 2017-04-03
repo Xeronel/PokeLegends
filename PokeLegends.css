@@ -1,3 +1,4 @@
+@-moz-document url-prefix("https://www.pokemonlegends.com/explore") {
 body {
     color: #CCC;
 }
@@ -93,4 +94,5 @@ div#mws-sidebar-stitch {
 .pokemon-hp {
     display: table;
     margin: 0 auto;
+}
 }
