@@ -1,6 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends HP
 // @namespace    https://halfcrap.com
+// @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_HP.meta.js
 // @version      0.1
 // @description  Show Pokemon Status
 // @author       Ripster
