@@ -20,6 +20,9 @@
         $.get(link, function (data) {
             // Find details table
             var details = $(data).find('.container > .mws-panel.grid_6 > .mws-panel-body > .mws-panel-content > table td');
+            var re = /expbar"\)\.innerText\s=\s(.+)\s\+\s"\/"\s\+\s(.*);/;
+            var expBar = re.exec(data);
+            pokemon.exp_pcnt = Math.round(parseInt(expBar[1])/parseInt(expBar[2])*100) + '%';
 
             // Iterate over columns
             $(details).each(function (idx, obj) {
@@ -34,12 +37,14 @@
                         pokemon.level = txt.split('Level: ')[1];
                     } else if (txt.includes('Health: ')) {
                         var hp = txt.split('Health: ')[1].split(' / ');
-                        pokemon.hp = hp[0];
-                        pokemon.max_hp = hp[1];
+                        pokemon.hp = parseInt(hp[0]);
+                        pokemon.max_hp = parseInt(hp[1]);
+                        pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp) * 100 + '%';
                     }
                 }
             });
 
+            //var expPcnt = parseInt(parseInt(expBar[0]) / parseInt(expBar[1]));
             // Update pokemon slot
             $('#'+slot).replaceWith(
                 '<div class="pokemon" id="'+slot+'">'+
@@ -48,6 +53,12 @@
                 '<img src="'+img.attr('src')+'">'+
                 '</a>'+
                 '<div class=pokemon-hp>' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
+                '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
+                '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';"></div>'+
+                '</div>'+
+                '<div id="exp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
+                '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';"></div>'+
+                '</div>'+
                 '</div>'
             );
         });
@@ -86,7 +97,6 @@
     // Update after battle
     setInterval(function () {
         if (prevInBattle === true && bInBattle === false) {
-            console.log("Loading party");
             loadParty();
         }
         prevInBattle = bInBattle;

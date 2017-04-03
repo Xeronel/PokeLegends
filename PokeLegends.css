@@ -71,7 +71,7 @@ div#mws-sidebar-stitch {
 #divPm {
     position: absolute;
     width: 18.5% !important;
-    margin-top: 230px;
+    margin-top: 280px;
 }
 
 #divPm > div.mws-panel.grid_2 {
@@ -90,6 +90,8 @@ div#mws-sidebar-stitch {
     width: 33.33%;
 }
 
+#hp-bar,
+#exp-bar,
 .pokemon-name,
 .pokemon > a,
 .pokemon-hp {
@@ -101,7 +103,24 @@ div#mws-sidebar-stitch {
     height: 62px;
 }
 
+.pokemon > a > img {
+    max-height: 62px;
+}
+
 .pokemon-name {
     padding-bottom: 1px;
+}
+
+#hp-bar,
+#exp-bar {
+    width: 85%;
+}
+
+#hp-bar {
+    margin-bottom: 2px;
+}
+
+#hp-bar > div {
+    background-color: #20B938;
 }
 }
