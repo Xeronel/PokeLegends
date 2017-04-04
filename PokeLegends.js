@@ -54,6 +54,7 @@
             // Get monster id and image source
             pokemon.mid = link.attr('href').split('?mid=')[1];
             pokemon.img = img.attr('src');
+            pokemon.link = link.attr('href');
 
             // Find details table
             var details = $(data).find('.container > .mws-panel.grid_6 > .mws-panel-body > .mws-panel-content > table td');
@@ -75,24 +76,8 @@
                         pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
                     }
                 }
-                addPokemon(slot, pokemon);
             });
-
-            // Update pokemon slot
-            $('#'+slot).children().remove();
-            $('#'+slot).append(
-                '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
-                '<a href="' + link + '" ondragstart="dragPoke(event)" draggable="true" target="_blank">'+
-                '<img src="'+img.attr('src')+'" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)">'+
-                '</a>'+
-                '<div class=pokemon-hp>' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
-                '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-                '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';"></div>'+
-                '</div>'+
-                '<div id="exp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-                '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';"></div>'+
-                '</div>'
-            );
+            addPokemon(slot, pokemon);
         });
     }
 
