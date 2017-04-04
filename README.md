@@ -1,4 +1,5 @@
 # PokeLegends
+A custom UI for [PokemonLegends](https://www.pokemonlegends.com/)  
 
 ## Installation
 ### Firefox
