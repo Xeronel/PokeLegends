@@ -2,7 +2,7 @@
 // @name         PokeLegends HP
 // @namespace    pokecrap
 // @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.6
+// @version      0.7
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
@@ -199,7 +199,7 @@
         if (activeScript.length > 0) {
             var scriptData = activeScript[0].args;
             if (lastLine !== scriptData) {
-                if (scriptData == 'Your Pokemon are fighting fit.') {
+                if (scriptData === 'Your Pokemon are fighting fit.' || scriptData === '...And done. Your Pokemon are good to go!') {
                     loadParty();
                 }
                 lastLine = scriptData;
