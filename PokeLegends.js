@@ -5,7 +5,7 @@
 // @version      0.8
 // @description  Pokemon Party UI
 // @author       Ripster
-// @match        https://www.pokemonlegends.com/explore
+// @match        https://www.pokemonlegends.com/explore*
 // @grant        unsafeWindow
 // ==/UserScript==
 
