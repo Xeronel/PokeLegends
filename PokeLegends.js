@@ -2,7 +2,7 @@
 // @name         PokeLegends UI
 // @namespace    pokecrap
 // @updateURL https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.6
+// @version      0.7
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
