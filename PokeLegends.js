@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @updateURL https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
+// @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
 // @version      0.8
-// @description  Show Pokemon Status
+// @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
 // @grant        unsafeWindow
@@ -106,6 +106,7 @@
 
             // Find details table
             var details = dataObj.find('.container > .mws-panel.grid_6 > .mws-panel-body > .mws-panel-content > table td');
+
             // Iterate over columns
             $(details).each(function (idx, obj) {
                 var txt = $(obj).text().trim() || $(obj).find('input').attr('value');
