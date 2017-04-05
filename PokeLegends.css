@@ -78,7 +78,7 @@
         width: 100%;
     }
 
-    /* Injected Pokemon */
+    /* Pokemon Party */
     #party {
         float: left;
         width: 18.5%;
@@ -128,5 +128,28 @@
     .empty-slot {
         height: 100px;
         width: 100%;
+    }
+    
+    /* Pokemon Info Tooltip */
+    .hidden {
+        display: none;
+    }
+    
+    .info-slot {
+        position: absolute;
+        background-color: #222;
+    }
+    
+    .info-slot > table {
+        width: 100%;
+    }
+    
+    .info-slot > table th {
+        padding: 5px;
+    }
+    
+    .info-slot > table td,
+    .info-slot > table th {
+        text-align: center;
     }
 }

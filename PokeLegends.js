@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         PokeLegends HP
+// @name         PokeLegends UI
 // @namespace    pokecrap
-// @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.7
+// @updateURL https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
+// @version      0.6
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
@@ -10,21 +10,26 @@
 // ==/UserScript==
 
 (function() {
-    'use strict';
     var prevInBattle = bInBattle;
     var lastLine;
 
     unsafeWindow.pokeTeam = {slot1: {}, slot2: {}, slot3: {}, slot4: {}, slot5: {}, slot6: {}};
 
+    function hideTooltips() {
+        $('#party-info > div').addClass('hidden');
+    }
+
     function removePokemon(slot) {
         /* Slot must be in the format of slotX */
         $('#' + slot).children().remove();
         $('#'+slot).append('<div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div>');
+        $('#'+slot+'info').children().remove();
         unsafeWindow.pokeTeam[slot] = {};
     }
 
     function addPokemon(slot, pokemon) {
         /* Slot must be in the format of slotX */
+        // Add pokemon to party
         $('#'+slot).children().remove();
         $('#'+slot).append(
             '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
@@ -39,7 +44,47 @@
             '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';"></div>'+
             '</div>'
         );
+
+        // Fill info div
+        $('#'+slot+'info').children().remove();
+        $('#'+slot+'info').append(
+            '<table>'+
+            '<thead>'+
+            '<tr><th colspan="6">' + pokemon.name + "'s Effort Values</th></tr>"+
+            '<tr><th>HP</th><th>Atk</th><th>Def</th><th>Spd</th><th>Spcl Atk</th><th>Spcl Def</th></tr>'+
+            '<tbody><tr>'+
+            '<tr>'+
+            '<td>' + pokemon.ev.hp + '</td>'+
+            '<td>' + pokemon.ev.attack + '</td>'+
+            '<td>' + pokemon.ev.defence + '</td>'+
+            '<td>' + pokemon.ev.speed + '</td>'+
+            '<td>' + pokemon.ev.spcl_atk + '</td>'+
+            '<td>' + pokemon.ev.spcl_def + '</td>'+
+            '</tr>'+
+            '</tr></tbody>'+
+            '</thead>'+
+            '</table>'
+        );
+        $('#'+slot+'info').append(
+            '<table>'+
+            '<thead>'+
+            '<tr><th colspan="6">' + pokemon.name + "'s Individual Values</th></tr>"+
+            '<tr><th>HP</th><th>Atk</th><th>Def</th><th>Spd</th><th>Spcl Atk</th><th>Spcl Def</th></tr>'+
+            '<tbody><tr>'+
+            '<tr>'+
+            '<td>' + pokemon.iv.hp + '</td>'+
+            '<td>' + pokemon.iv.attack + '</td>'+
+            '<td>' + pokemon.iv.defence + '</td>'+
+            '<td>' + pokemon.iv.speed + '</td>'+
+            '<td>' + pokemon.iv.spcl_atk + '</td>'+
+            '<td>' + pokemon.iv.spcl_def + '</td>'+
+            '</tr>'+
+            '</tr></tbody>'+
+            '</thead>'+
+            '</table>'
+        );
         unsafeWindow.pokeTeam[slot] = pokemon;
+        $('#'+slot+'info').addClass('hidden');
     }
 
     function loadPokemon(link, img, slot) {
@@ -77,8 +122,27 @@
                         pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
                     }
                 }
+                // HP   Attack  Defence     Speed   Special Attack  Special Defence
+                var iv = $(data).find('span:contains(Individual Values)').parent().parent().find('.mws-panel-body > table').dataTable().api().data()[0];
+                var ev = $(data).find('span:contains(Effort Values)').parent().parent().children('.mws-panel-body').find('table').dataTable().api().data()[0];
+                pokemon.iv = {
+                    hp: iv[0],
+                    attack: iv[1],
+                    defence: iv[2],
+                    speed: iv[3],
+                    spcl_atk: iv[4],
+                    spcl_def: iv[5]
+                };
+                pokemon.ev = {
+                    hp: ev[0],
+                    attack: ev[1],
+                    defence: ev[2],
+                    speed: ev[3],
+                    spcl_atk: ev[4],
+                    spcl_def: ev[5]
+                };
+                addPokemon(slot, pokemon);
             });
-            addPokemon(slot, pokemon);
         });
     }
 
@@ -108,7 +172,6 @@
                 }
             });
     }
-    unsafeWindow.loadParty = loadParty;
 
     function moveToPC(slot, callback) {
         $.get(
@@ -134,12 +197,29 @@
         );
     }
 
+    function hoverEnterSlot () {
+        var slot = $(this);
+        var infoSlot = $('#' + slot.attr('id') + 'info');
+        var pos = slot.position();
+        var height = slot.outerHeight();
+        infoSlot.removeClass('hidden');
+        infoSlot.css('top', pos.top + height + 'px');
+        infoSlot.css('left', pos.left + 'px');
+    }
+
+    function hoverExitSlot () {
+        var slot = $(this);
+        var infoSlot = $('#' + slot.attr('id') + 'info');
+        infoSlot.addClass('hidden');
+    }
+
     unsafeWindow.allowPokeDrop = function (ev) {
         ev.preventDefault();
     };
 
     unsafeWindow.dragPoke = function (ev) {
         ev.dataTransfer.setData("text", $(ev.target).closest('div')[0].id);
+        hideTooltips();
     };
 
     unsafeWindow.dropPoke = function (ev) {
@@ -171,17 +251,24 @@
         }
     };
 
-    // Insert party div
-    $('#divPm').before(
-        '<div id="party">'+
-        '<div class="pokemon" id="slot1"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '<div class="pokemon" id="slot2"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '<div class="pokemon" id="slot3"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '<div class="pokemon" id="slot4"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '<div class="pokemon" id="slot5"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '<div class="pokemon" id="slot6"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>'+
-        '</div>'
-    );
+    // Build div html
+    var partyDiv = '<div id="party">';
+    var infoDiv = '<div id="party-info">';
+    for (var i = 1; i < 7; i++) {
+        var slot = 'slot' + i;
+        var slotInfo = slot + 'info';
+        partyDiv += '<div class="pokemon" id="' + slot + '"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>';
+        infoDiv += '<div id="' + slotInfo + '" class="hidden info-slot"></div>';
+    }
+    partyDiv += '</div>';
+    infoDiv += '</div>';
+
+    // Insert divs
+    $('#divPm').before(partyDiv);
+    $('#party').after(infoDiv);
+
+    // Add onhover events
+    $('.pokemon').hover(hoverEnterSlot, hoverExitSlot);
 
     // Initially load party
     loadParty();
@@ -199,7 +286,7 @@
         if (activeScript.length > 0) {
             var scriptData = activeScript[0].args;
             if (lastLine !== scriptData) {
-                if (scriptData === 'Your Pokemon are fighting fit.' || scriptData === '...And done. Your Pokemon are good to go!') {
+                if (scriptData == 'Your Pokemon are fighting fit.' || scriptData === '...And done. Your Pokemon are good to go!') {
                     loadParty();
                 }
                 lastLine = scriptData;
