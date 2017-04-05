@@ -2,7 +2,7 @@
 // @name         PokeLegends UI
 // @namespace    pokecrap
 // @updateURL https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.7
+// @version      0.8
 // @description  Show Pokemon Status
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore
@@ -92,6 +92,8 @@
 
         // Get pokemon page
         $.get(link.attr('href'), function (data) {
+            var dataObj = $(data);
+
             // Get exp percent
             var re = /expbar"\)\.innerText\s=\s(.+)\s\+\s"\/"\s\+\s(.*);/;
             var expBar = re.exec(data);
@@ -103,11 +105,10 @@
             pokemon.link = link.attr('href');
 
             // Find details table
-            var details = $(data).find('.container > .mws-panel.grid_6 > .mws-panel-body > .mws-panel-content > table td');
+            var details = dataObj.find('.container > .mws-panel.grid_6 > .mws-panel-body > .mws-panel-content > table td');
             // Iterate over columns
             $(details).each(function (idx, obj) {
                 var txt = $(obj).text().trim() || $(obj).find('input').attr('value');
-
                 // Skip blank lines
                 if (txt) {
                     // Parse data, this is ugly but there isn't any specific classes or id's in the table
@@ -123,23 +124,22 @@
                     }
                 }
                 // HP   Attack  Defence     Speed   Special Attack  Special Defence
-                var iv = $(data).find('span:contains(Individual Values)').parent().parent().find('.mws-panel-body > table').dataTable().api().data()[0];
-                var ev = $(data).find('span:contains(Effort Values)').parent().parent().children('.mws-panel-body').find('table').dataTable().api().data()[0];
+                var cells = dataObj.find('.mws-datatable td');
                 pokemon.iv = {
-                    hp: iv[0],
-                    attack: iv[1],
-                    defence: iv[2],
-                    speed: iv[3],
-                    spcl_atk: iv[4],
-                    spcl_def: iv[5]
+                    hp: cells[4].innerHTML,
+                    attack: cells[5].innerHTML,
+                    defence: cells[6].innerHTML,
+                    speed: cells[7].innerHTML,
+                    spcl_atk: cells[8].innerHTML,
+                    spcl_def: cells[9].innerHTML
                 };
                 pokemon.ev = {
-                    hp: ev[0],
-                    attack: ev[1],
-                    defence: ev[2],
-                    speed: ev[3],
-                    spcl_atk: ev[4],
-                    spcl_def: ev[5]
+                    hp: cells[10].innerHTML,
+                    attack: cells[11].innerHTML,
+                    defence: cells[12].innerHTML,
+                    speed: cells[13].innerHTML,
+                    spcl_atk: cells[14].innerHTML,
+                    spcl_def: cells[15].innerHTML
                 };
                 addPokemon(slot, pokemon);
             });
@@ -150,7 +150,7 @@
         $.ajax(
             {
                 url: '/team',
-                cache: false,
+                cache: true,
                 success: function (data) {
                     // Empty slots
                     var emptySlots = $(data).find('.full-box > .box-empty');
