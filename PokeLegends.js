@@ -2,7 +2,7 @@
 // @name         PokeLegends UI
 // @namespace    pokecrap
 // @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.8
+// @version      0.9
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
