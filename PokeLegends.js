@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      0.10
+// @version      1.0
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
