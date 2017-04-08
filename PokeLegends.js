@@ -1,8 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @updateURL    https://openuserjs.org/meta/Ripster/PokeLegends_UI.meta.js
-// @version      0.9
+// @version      0.10
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -203,9 +202,15 @@
         var infoSlot = $('#' + slot.attr('id') + 'info');
         var pos = slot.position();
         var height = slot.outerHeight();
+        var viewport = (pos.left + infoSlot.width()) - $(window).width();
+
         infoSlot.removeClass('hidden');
         infoSlot.css('top', pos.top + height + 'px');
-        infoSlot.css('left', pos.left + 'px');
+        if (viewport > 0) {
+            infoSlot.css('left', (pos.left - viewport) + 'px');
+        } else {
+            infoSlot.css('left', pos.left + 'px');
+        }
     }
 
     function hoverExitSlot () {
