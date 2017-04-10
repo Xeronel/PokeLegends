@@ -2,6 +2,8 @@
 A custom UI for [PokemonLegends](https://www.pokemonlegends.com/)  
 
 ## Installation
+Install Stylish and Tampermonkey first and then install the script and theme afterwards.  
+
 ### Firefox
 Install [Tampermonkey](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)  
 Install [Stylish](https://addons.mozilla.org/en-US/firefox/addon/stylish/)
