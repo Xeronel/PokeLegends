@@ -14,10 +14,21 @@ body,
 	margin: 0;
 }
 
-/* Ads */
-#mws-container > div > div.row > div,
-#mws-container > div.container > div.mws-panel.grid_8 {
-    display: none;
+/* Pokemon Legends Extension */
+#location_data_grid {
+	float: left;
+	position: absolute;
+	top: 50%;
+	margin: 0 0 0 3px;
+	width: 18.5%;
+}
+#location_data_grid > div.mws-panel-body {
+	background-color: #35353A;
+	display: block !important;
+}
+#location_data_grid > div.mws-panel-body i {
+	color: white;
+	font-weight: bold;
 }
 
 /* Side bar stitch */
@@ -141,6 +152,31 @@ div#mws-sidebar-stitch {
 	#pokeSkills .chosen-container {
 		width: 100% !important;
 	}
+	
+	/* PokeLegends Extension */
+	#location_data_grid {
+		position: fixed;
+		top: 0;
+		right: 0;
+		width: 50%;
+	}
+	#location_data_grid > div.mws-panel-header {
+		background-color: transparent;
+		height: 0px;
+		width: 0px;
+		padding-bottom: 5px;
+	}
+	#location_data_grid > div > span.mws-i-24 {
+		position: fixed;
+		top: 0;
+		right: -15px;
+		width: 0;
+		height: 15px;
+		background-size: 15px 15px;
+	}
+	#location_data_grid > div.mws-panel-body {
+		display: none  !important;
+	}
 }
 @media screen and (max-width: 500px) {
 	#pokeSkills {
@@ -152,6 +188,9 @@ div#mws-sidebar-stitch {
 	}
 	#pokeSkills .chosen-container {
 		width: 100% !important;
+	}
+	#location_data_grid {
+		width: 100%;
 	}
 }
 
@@ -257,6 +296,12 @@ div#mws-sidebar-stitch {
 #pokeSkills > .mws-panel-body > form > input {
 	float: right;
 	text-align: center;
+}
+#pokeSkills > .mws-panel-body > form > button {
+	height: 32px;
+}
+#pokeSkills > .mws-panel-body > form > input {
+	height: 18px;
 }
 #pokeSkills > div > select {
 	display: none;

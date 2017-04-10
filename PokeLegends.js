@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.4
+// @version      1.5
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -336,6 +336,22 @@
     $('#divPm').before(partyDiv);
     $('#party').after(infoDiv);
     $('.container').append('<div class="mws-panel hidden" id="pokeSkills"></div>');
+    setTimeout(function () {
+        var loc_dg = $('#location_data_grid');
+        if (loc_dg.length > 0) {
+            loc_dg.insertAfter('#party');
+            var body = $('#location_data_grid > div.mws-panel-body');
+            $('#location_data_grid > div.mws-panel-header > span').hover(function () {
+                if ($(window).width() <= 860) {
+                    body.attr('style', 'display: block !important');
+                }
+            }, function () {
+                if ($(window).width() <= 860) {
+                    body.hide();
+                }
+            });
+        }
+    }, 1000);
 
     // Add onhover events
     $('.pokemon').hover(hoverEnterSlot, hoverExitSlot);
