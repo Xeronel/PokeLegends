@@ -289,14 +289,15 @@
                 '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
                 '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
                 '<input id="skillSubmit" type="text" name="updateSkills" class="mws-button green" value="Save Attack Order">'+
-                '<button id="skillCancel" class="mws-button red">Cancel</button>'+
+                '<button type="button" id="skillCancel" class="mws-button red">Cancel</button>'+
                 '</form>'+
                 '</div>'
             );
             skillDiv.find('#pokeAtk2 option[value='+dropdown[1].value+']').prop('selected', true).change();
             skillDiv.find('#pokeAtk3 option[value='+dropdown[2].value+']').prop('selected', true).change();
             skillDiv.find('#pokeAtk4 option[value='+dropdown[3].value+']').prop('selected', true).change();
-            $('#skillCancel').click(function () {
+            $('#skillCancel').click(function (ev) {
+                ev.preventDefault();
                 skillDiv.addClass('hidden');
                 skillDiv.children().remove();
             });
