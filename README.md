@@ -16,7 +16,7 @@ Install [Stylish](https://chrome.google.com/webstore/detail/stylish-custom-theme
 
 ## Screenshots  
 ### Redesigned dark UI  
-![explore](http://i.imgur.com/V1M8g1P.png)  
+![explore](http://i.imgur.com/43DP3n0.png)  
 ### Hover for stats  
 ![stats](http://i.imgur.com/Itm4DTa.png)  
 ### Edit skills  
