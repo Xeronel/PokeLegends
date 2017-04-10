@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.3
+// @version      1.4
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -13,6 +13,55 @@
     var lastLine;
 
     unsafeWindow.pokeTeam = {slot1: {}, slot2: {}, slot3: {}, slot4: {}, slot5: {}, slot6: {}};
+
+    function editSkills(e) {
+        var slot = $(this).parents('.pokemon').attr('id');
+        var link = unsafeWindow.pokeTeam[slot].link;
+        var name = unsafeWindow.pokeTeam[slot].name;
+        e.preventDefault();
+        $.get(link, function (data) {
+            data = $(data);
+            var dropdown = data.find('.mws-datatable td select');
+            var skills = dropdown[0].innerHTML;
+            var skillDiv = $('#pokeSkills');
+            skillDiv.children().remove();
+            skillDiv.append(
+                '<div class="mws-panel-header">'+
+                '<span class="mws-i-24 i-table-1">'+name+"'s Moves</span>"+
+                '</div>'+
+                '<div class="mws-panel-body clearfix">'+
+                '<form id="pokeSkillForm">'+
+                '<select class="poke-select" id="pokeAtk1" name="atk1">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk2" name="atk2">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
+                '<input id="skillSubmit" type="text" name="updateSkills" class="mws-button green" value="Save Attack Order">'+
+                '<button type="button" id="skillCancel" class="mws-button red">Cancel</button>'+
+                '</form>'+
+                '</div>'
+            );
+            skillDiv.find('#pokeAtk2 option[value='+dropdown[1].value+']').prop('selected', true).change();
+            skillDiv.find('#pokeAtk3 option[value='+dropdown[2].value+']').prop('selected', true).change();
+            skillDiv.find('#pokeAtk4 option[value='+dropdown[3].value+']').prop('selected', true).change();
+            $('#skillCancel').click(function (ev) {
+                ev.preventDefault();
+                skillDiv.addClass('hidden');
+                skillDiv.children().remove();
+            });
+            var pokeSkillForm = $('#pokeSkillForm');
+            pokeSkillForm.submit(function (event) { event.preventDefault(); });
+            $('#skillSubmit').click(function () {
+                $('#pokeSkills').addClass('hidden');
+                $.ajax({
+                    type: 'POST',
+                    url: link+'&action=SkillUpdated',
+                    data: pokeSkillForm.serialize()
+                });
+            });
+            skillDiv.removeClass('hidden');
+            $('.poke-select').chosen();
+        });
+    }
 
     function hideTooltips() {
         $('#party-info > div').addClass('hidden');
@@ -34,7 +83,7 @@
             '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
             '<div>'+
             '<div class="poke-edit hidden">'+
-            '<a href="#" class="mws-i-24 i-pencil-edit" onclick="pokeUI.editSkills(this)"></a>'+
+            '<a href="#" class="mws-i-24 i-pencil-edit"></a>'+
             '</div>'+
             '<a href="' + pokemon.link + '" ondragstart="pokeUI.dragPoke(event)" draggable="true" target="_blank">'+
             '<img src="'+ pokemon.img + '" ondrop="pokeUI.dropPoke(event)" ondragover="pokeUI.allowPokeDrop(event)">'+
@@ -89,6 +138,7 @@
         );
         unsafeWindow.pokeTeam[slot] = pokemon;
         $('#'+slot+'info').addClass('hidden');
+        $('#'+slot+' .i-pencil-edit').click(pokeUI.editSkills);
     }
 
     function loadPokemon(link, img, slot) {
@@ -268,54 +318,7 @@
         }
     };
 
-    unsafeWindow.pokeUI.editSkills = function (e) {
-        var slot = $(e).parents('.pokemon').attr('id');
-        var link = unsafeWindow.pokeTeam[slot].link;
-        var name = unsafeWindow.pokeTeam[slot].name;
-        event.preventDefault();
-        $.get(link, function (data) {
-            data = $(data);
-            var dropdown = data.find('.mws-datatable td select');
-            var skills = dropdown[0].innerHTML;
-            var skillDiv = $('#pokeSkills');
-            skillDiv.children().remove();
-            skillDiv.append(
-                '<div class="mws-panel-header">'+
-                '<span class="mws-i-24 i-table-1">'+name+"'s Moves</span>"+
-                '</div>'+
-                '<div class="mws-panel-body clearfix">'+
-                '<form id="pokeSkillForm">'+
-                '<select class="poke-select" id="pokeAtk1" name="atk1">'+skills +'</spreventDefaultelect>'+
-                '<select class="poke-select" id="pokeAtk2" name="atk2">'+skills +'</select>'+
-                '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
-                '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
-                '<input id="skillSubmit" type="text" name="updateSkills" class="mws-button green" value="Save Attack Order">'+
-                '<button type="button" id="skillCancel" class="mws-button red">Cancel</button>'+
-                '</form>'+
-                '</div>'
-            );
-            skillDiv.find('#pokeAtk2 option[value='+dropdown[1].value+']').prop('selected', true).change();
-            skillDiv.find('#pokeAtk3 option[value='+dropdown[2].value+']').prop('selected', true).change();
-            skillDiv.find('#pokeAtk4 option[value='+dropdown[3].value+']').prop('selected', true).change();
-            $('#skillCancel').click(function (ev) {
-                ev.preventDefault();
-                skillDiv.addClass('hidden');
-                skillDiv.children().remove();
-            });
-            var pokeSkillForm = $('#pokeSkillForm');
-            pokeSkillForm.submit(function (event) { event.preventDefault(); });
-            $('#skillSubmit').click(function () {
-                $('#pokeSkills').addClass('hidden');
-                $.ajax({
-                    type: 'POST',
-                    url: link+'&action=SkillUpdated',
-                    data: pokeSkillForm.serialize()
-                });
-            });
-            skillDiv.removeClass('hidden');
-            $('.poke-select').chosen();
-        });
-    };
+    unsafeWindow.pokeUI.editSkills = editSkills;
 
     // Build div html
     var partyDiv = '<div id="party">';
