@@ -12,4 +12,4 @@ Install [Stylish](https://chrome.google.com/webstore/detail/stylish-custom-theme
 
 ### Install Script and Theme
 [PokeLegends UI Script](https://greasyfork.org/en/scripts/28723-pokelegends-ui/)  
-[PokeLegends UI Theme](https://userstyles.org/styles/140834/pokemon-legends-dark)
+[PokeLegends UI Theme](https://userstyles.org/styles/140834/pokelegends-ui)
