@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.0
+// @version      1.1
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -21,7 +21,7 @@
     function removePokemon(slot) {
         /* Slot must be in the format of slotX */
         $('#' + slot).children().remove();
-        $('#'+slot).append('<div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div>');
+        $('#'+slot).append('<div class="empty-slot" ondrop="pokeUI.dropPoke(event)" ondragover="pokeUI.allowPokeDrop(event)"></div>');
         $('#'+slot+'info').children().remove();
         unsafeWindow.pokeTeam[slot] = {};
     }
@@ -32,9 +32,14 @@
         $('#'+slot).children().remove();
         $('#'+slot).append(
             '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
-            '<a href="' + pokemon.link + '" ondragstart="dragPoke(event)" draggable="true" target="_blank">'+
-            '<img src="'+ pokemon.img + '" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)">'+
+            '<div>'+
+            '<div class="poke-edit hidden">'+
+            '<a href="#" class="mws-i-24 i-pencil-edit" onclick="pokeUI.editSkills(this)"></a>'+
+            '</div>'+
+            '<a href="' + pokemon.link + '" ondragstart="pokeUI.dragPoke(event)" draggable="true" target="_blank">'+
+            '<img src="'+ pokemon.img + '" ondrop="pokeUI.dropPoke(event)" ondragover="pokeUI.allowPokeDrop(event)">'+
             '</a>'+
+            '</div>'+
             '<div class=pokemon-hp>' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
             '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
             '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';"></div>'+
@@ -200,10 +205,12 @@
     function hoverEnterSlot () {
         var slot = $(this);
         var infoSlot = $('#' + slot.attr('id') + 'info');
+        var edit = slot.find('.poke-edit');
         var pos = slot.position();
         var height = slot.outerHeight();
         var viewport = (pos.left + infoSlot.width()) - $(window).width();
 
+        edit.removeClass('hidden');
         infoSlot.removeClass('hidden');
         infoSlot.css('top', pos.top + height + 'px');
         if (viewport > 0) {
@@ -215,20 +222,24 @@
 
     function hoverExitSlot () {
         var slot = $(this);
+        var edit = slot.find('.poke-edit');
         var infoSlot = $('#' + slot.attr('id') + 'info');
         infoSlot.addClass('hidden');
+        edit.addClass('hidden');
     }
 
-    unsafeWindow.allowPokeDrop = function (ev) {
+    unsafeWindow.pokeUI = {};
+
+    unsafeWindow.pokeUI.allowPokeDrop = function (ev) {
         ev.preventDefault();
     };
 
-    unsafeWindow.dragPoke = function (ev) {
-        ev.dataTransfer.setData("text", $(ev.target).closest('div')[0].id);
+    unsafeWindow.pokeUI.dragPoke = function (ev) {
+        ev.dataTransfer.setData("text", $(ev.target).parents('.pokemon')[0].id);
         hideTooltips();
     };
 
-    unsafeWindow.dropPoke = function (ev) {
+    unsafeWindow.pokeUI.dropPoke = function (ev) {
         ev.preventDefault();
         var data = ev.dataTransfer.getData('text');
         var moveFromSlot = $(document.getElementById(data)).attr('id').split('slot')[1];
@@ -257,13 +268,60 @@
         }
     };
 
+    unsafeWindow.pokeUI.editSkills = function (e) {
+        var slot = $(e).parents('.pokemon').attr('id');
+        var link = unsafeWindow.pokeTeam[slot].link;
+        var name = unsafeWindow.pokeTeam[slot].name;
+        $.get(link, function (data) {
+            data = $(data);
+            var dropdown = data.find('.mws-datatable td select');
+            var skills = dropdown[0].innerHTML;
+            var skillDiv = $('#pokeSkills');
+            skillDiv.children().remove();
+            skillDiv.append(
+                '<div class="mws-panel-header">'+
+                '<span class="mws-i-24 i-table-1">'+name+"'s Moves</span>"+
+                '</div>'+
+                '<div class="mws-panel-body clearfix">'+
+                '<form id="pokeSkillForm">'+
+                '<select class="poke-select" id="pokeAtk1" name="atk1">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk2" name="atk2">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
+                '<button id="skillCancel" class="mws-button red">Cancel</button>'+
+                '<input id="skillSubmit" type="text" name="updateSkills" class="mws-button green" value="Save Attack Order">'+
+                '</form>'+
+                '</div>'
+            );
+            skillDiv.find('#pokeAtk2 option[value='+dropdown[1].value+']').prop('selected', true).change();
+            skillDiv.find('#pokeAtk3 option[value='+dropdown[2].value+']').prop('selected', true).change();
+            skillDiv.find('#pokeAtk4 option[value='+dropdown[3].value+']').prop('selected', true).change();
+            $('#skillCancel').click(function () {
+                skillDiv.addClass('hidden');
+                skillDiv.children().remove();
+            });
+            var pokeSkillForm = $('#pokeSkillForm');
+            pokeSkillForm.submit(function (event) { event.preventDefault(); });
+            $('#skillSubmit').click(function () {
+                $('#pokeSkills').addClass('hidden');
+                $.ajax({
+                    type: 'POST',
+                    url: link+'&action=SkillUpdated',
+                    data: pokeSkillForm.serialize()
+                });
+            });
+            skillDiv.removeClass('hidden');
+            $('.poke-select').chosen();
+        });
+    };
+
     // Build div html
     var partyDiv = '<div id="party">';
     var infoDiv = '<div id="party-info">';
     for (var i = 1; i < 7; i++) {
         var slot = 'slot' + i;
         var slotInfo = slot + 'info';
-        partyDiv += '<div class="pokemon" id="' + slot + '"><div class="empty-slot" ondrop="dropPoke(event)" ondragover="allowPokeDrop(event)"></div></div>';
+        partyDiv += '<div class="pokemon" id="' + slot + '"><div class="empty-slot" ondrop="pokeUI.dropPoke(event)" ondragover="pokeUI.allowPokeDrop(event)"></div></div>';
         infoDiv += '<div id="' + slotInfo + '" class="hidden info-slot"></div>';
     }
     partyDiv += '</div>';
@@ -272,6 +330,7 @@
     // Insert divs
     $('#divPm').before(partyDiv);
     $('#party').after(infoDiv);
+    $('.container').append('<div class="mws-panel hidden" id="pokeSkills"></div>');
 
     // Add onhover events
     $('.pokemon').hover(hoverEnterSlot, hoverExitSlot);
