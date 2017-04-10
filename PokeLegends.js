@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.1
+// @version      1.2
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -288,8 +288,8 @@
                 '<select class="poke-select" id="pokeAtk2" name="atk2">'+skills +'</select>'+
                 '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
                 '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
-                '<button id="skillCancel" class="mws-button red">Cancel</button>'+
                 '<input id="skillSubmit" type="text" name="updateSkills" class="mws-button green" value="Save Attack Order">'+
+                '<button id="skillCancel" class="mws-button red">Cancel</button>'+
                 '</form>'+
                 '</div>'
             );

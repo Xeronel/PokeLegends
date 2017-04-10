@@ -253,6 +253,7 @@ div#mws-sidebar-stitch {
 	padding: 0px 2px 1px 2px;
 	border-color: white;
 }
+#pokeSkills > .mws-panel-body > form > button,
 #pokeSkills > .mws-panel-body > form > input {
 	float: right;
 	text-align: center;
@@ -263,11 +264,9 @@ div#mws-sidebar-stitch {
 #pokeSkills .chosen-results > .active-result {
 	color: black;
 }
-
 #pokeSkills .chosen-results > .highlighted {
 	color: white;
 }
-
 #pokeSkills .chosen-container {
 	max-width: 100%;
 }
