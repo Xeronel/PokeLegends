@@ -13,3 +13,13 @@ Install [Stylish](https://chrome.google.com/webstore/detail/stylish-custom-theme
 ### Install Script and Theme
 [PokeLegends UI Script](https://greasyfork.org/en/scripts/28723-pokelegends-ui/)  
 [PokeLegends UI Theme](https://userstyles.org/styles/140834/pokelegends-ui)
+
+## Screenshots  
+### Redesigned dark UI  
+![explore](http://i.imgur.com/V1M8g1P.png)  
+### Hover for stats  
+![stats](http://i.imgur.com/Itm4DTa.png)  
+### Edit skills  
+![skills](http://i.imgur.com/GtYykYT.png)  
+### Drag and drop  
+![dragdrop](http://i.imgur.com/e8SgIMc.gif) 
