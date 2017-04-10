@@ -24,4 +24,4 @@ Install [Stylish](https://chrome.google.com/webstore/detail/stylish-custom-theme
 ### Drag and drop  
 ![dragdrop](http://i.imgur.com/e8SgIMc.gif) 
 ### Minimal Mode
-![minimal](http://i.imgur.com/W8NSenz.png)
+![minimal](http://i.imgur.com/ZAnilw8.png)
