@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.2
+// @version      1.3
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -272,6 +272,7 @@
         var slot = $(e).parents('.pokemon').attr('id');
         var link = unsafeWindow.pokeTeam[slot].link;
         var name = unsafeWindow.pokeTeam[slot].name;
+        event.preventDefault();
         $.get(link, function (data) {
             data = $(data);
             var dropdown = data.find('.mws-datatable td select');
@@ -284,7 +285,7 @@
                 '</div>'+
                 '<div class="mws-panel-body clearfix">'+
                 '<form id="pokeSkillForm">'+
-                '<select class="poke-select" id="pokeAtk1" name="atk1">'+skills +'</select>'+
+                '<select class="poke-select" id="pokeAtk1" name="atk1">'+skills +'</spreventDefaultelect>'+
                 '<select class="poke-select" id="pokeAtk2" name="atk2">'+skills +'</select>'+
                 '<select class="poke-select" id="pokeAtk3" name="atk3">'+skills +'</select>'+
                 '<select class="poke-select" id="pokeAtk4" name="atk4">'+skills +'</select>'+
