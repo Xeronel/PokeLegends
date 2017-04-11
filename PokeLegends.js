@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.5
+// @version      1.6
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -80,7 +80,7 @@
         // Add pokemon to party
         $('#'+slot).children().remove();
         $('#'+slot).append(
-            '<div class="pokemon-name">' + pokemon.name + ' Lv.' + pokemon.level + '</div>'+
+            '<div class="pokemon-name">' + pokemon.name + '</div>'+
             '<div>'+
             '<div class="poke-edit hidden">'+
             '<a href="#" class="mws-i-24 i-pencil-edit"></a>'+
@@ -89,12 +89,16 @@
             '<img src="'+ pokemon.img + '" ondrop="pokeUI.dropPoke(event)" ondragover="pokeUI.allowPokeDrop(event)">'+
             '</a>'+
             '</div>'+
-            '<div class=pokemon-hp>' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
+            '<div id="poke-lvl">' + 'Lv.' + pokemon.level + '</div>'+
             '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';"></div>'+
+            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';">'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
+            '</div>'+
             '</div>'+
             '<div id="exp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';"></div>'+
+            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';">'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.exp + '/' + pokemon.max_exp + '</div>'+
+            '</div>'+
             '</div>'
         );
 
@@ -152,6 +156,8 @@
             var re = /expbar"\)\.innerText\s=\s(.+)\s\+\s"\/"\s\+\s(.*);/;
             var expBar = re.exec(data);
             pokemon.exp_pcnt = Math.round(parseInt(expBar[1])/parseInt(expBar[2])*100) + '%';
+            pokemon.exp = expBar[1];
+            pokemon.max_exp = expBar[2];
 
             // Get monster id and image source
             pokemon.mid = link.attr('href').split('?mid=')[1];
@@ -168,7 +174,7 @@
                 if (txt) {
                     // Parse data, this is ugly but there isn't any specific classes or id's in the table
                     if (txt.includes('Name: ')) {
-                        pokemon.name = txt.split('Name: ')[1];
+                        pokemon.name = txt.split('Name: ')[1].split(' (')[0];
                     } else if (txt.includes('Level: ')) {
                         pokemon.level = txt.split('Level: ')[1];
                     } else if (txt.includes('Health: ')) {

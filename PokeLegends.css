@@ -22,7 +22,7 @@ body,
 #location_data_grid {
 	float: left;
 	position: absolute;
-	top: 50%;
+	top: 55%;
 	margin: 0 0 0 3px;
 	width: 18.5%;
 }
@@ -216,6 +216,7 @@ div#mws-sidebar-stitch {
 /* Pokemon Party */
 #party {
     float: left;
+	top: 10px;
     width: 18.5%;
     position: absolute;
 }
@@ -228,10 +229,27 @@ div#mws-sidebar-stitch {
 #exp-bar,
 .pokemon-name,
 .pokemon > div > a,
-.pokemon-hp {
+#poke-lvl,
+.progress-text {
     display: table;
     margin: 0 auto;
 }
+.progress-text {
+	width: 50%;
+	margin: 0 auto;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 90%;
+	color: white;
+	font-weight: bold;
+}
+#hp-bar .progress-text {
+	text-shadow: -1px 0 #025d06, 0 1px #025d06, 1px 0 #025d06, 0 -1px #025d06
+}
+#exp-bar .progress-text {
+	text-shadow: -1px 0 #6f6401, 0 1px #6f6401, 1px 0 #6f6401, 0 -1px #6f6401
+}
+
 .pokemon > div > a {
     height: 62px;
 }
