@@ -92,7 +92,7 @@
             '</div>'+
             '<div id="poke-lvl">' + 'Lv.' + pokemon.level + '</div>'+
             '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';">'+
+            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pcnt + ';">'+
             '<div id="pokemon-hp" class="progress-text">' + pokemon.hp_pcnt + '</div>'+
             '</div>'+
             '</div>'+
