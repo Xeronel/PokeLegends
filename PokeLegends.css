@@ -227,6 +227,7 @@ div#mws-sidebar-stitch {
 }
 #hp-bar,
 #exp-bar,
+.poke-centered,
 .pokemon-name,
 .pokemon > div > a,
 #poke-lvl,
@@ -234,12 +235,16 @@ div#mws-sidebar-stitch {
     display: table;
     margin: 0 auto;
 }
+#hp-bar,
+#exp-bar {
+	height: 12px;
+}
 .progress-text {
 	width: 50%;
 	margin: 0 auto;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 90%;
+	font-size: 11px;
 	color: white;
 	font-weight: bold;
 }
@@ -249,7 +254,6 @@ div#mws-sidebar-stitch {
 #exp-bar .progress-text {
 	text-shadow: -1px 0 #6f6401, 0 1px #6f6401, 1px 0 #6f6401, 0 -1px #6f6401
 }
-
 .pokemon > div > a {
     height: 62px;
 }

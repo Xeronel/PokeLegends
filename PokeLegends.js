@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.6
+// @version      1.7
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -76,11 +76,12 @@
     }
 
     function addPokemon(slot, pokemon) {
+        var slotInfo = $('#'+slot+'info');
         /* Slot must be in the format of slotX */
         // Add pokemon to party
         $('#'+slot).children().remove();
         $('#'+slot).append(
-            '<div class="pokemon-name">' + pokemon.name + '</div>'+
+            '<div class="pokemon-name">' + pokemon.display_name + '</div>'+
             '<div>'+
             '<div class="poke-edit hidden">'+
             '<a href="#" class="mws-i-24 i-pencil-edit"></a>'+
@@ -92,56 +93,74 @@
             '<div id="poke-lvl">' + 'Lv.' + pokemon.level + '</div>'+
             '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
             '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pct + ';">'+
-            '<div id="pokemon-hp" class="progress-text">' + pokemon.hp + '/' + pokemon.max_hp + '</div>'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.hp_pcnt + '</div>'+
             '</div>'+
             '</div>'+
             '<div id="exp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
             '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';">'+
-            '<div id="pokemon-hp" class="progress-text">' + pokemon.exp + '/' + pokemon.max_exp + '</div>'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.exp_pcnt + '</div>'+
             '</div>'+
             '</div>'
         );
 
         // Fill info div
-        $('#'+slot+'info').children().remove();
-        $('#'+slot+'info').append(
+        slotInfo.children().remove();
+        slotInfo.append();
+        slotInfo.append(
             '<table>'+
             '<thead>'+
-            '<tr><th colspan="6">' + pokemon.name + "'s Effort Values</th></tr>"+
+            '<tr><th colspan="3">'+
+            (function () {
+                if (pokemon.nickname) {
+                    return '<div class="poke-centered">' + pokemon.nickname +' (' + pokemon.name + ')</div>';
+                } else {
+                    return '<div class="poke-centered">' + pokemon.name + '</div>';
+                }
+            })() +
+            '</th></tr>'+
+            '<tr><th>Level</th><th>HP</th><th>Exp</th></tr>'+
+            '</thead>'+
+            '<tbody><tr>'+
+            '<td>'+ pokemon.level + '</td>'+
+            '<td>' + pokemon.hp + '/' + pokemon.max_hp + '</td>'+
+            '<td>' + pokemon.exp + '/' + pokemon.max_exp + '</td>'+
+            '</tr></tbody>'+
+            '</table>'
+        );
+        slotInfo.append(
+            '<table>'+
+            '<thead>'+
+            '<tr><th colspan="6">Effort Values</th></tr>'+
             '<tr><th>HP</th><th>Atk</th><th>Def</th><th>Spd</th><th>Spcl Atk</th><th>Spcl Def</th></tr>'+
             '<tbody><tr>'+
-            '<tr>'+
             '<td>' + pokemon.ev.hp + '</td>'+
             '<td>' + pokemon.ev.attack + '</td>'+
             '<td>' + pokemon.ev.defence + '</td>'+
             '<td>' + pokemon.ev.speed + '</td>'+
             '<td>' + pokemon.ev.spcl_atk + '</td>'+
             '<td>' + pokemon.ev.spcl_def + '</td>'+
-            '</tr>'+
             '</tr></tbody>'+
             '</thead>'+
             '</table>'
         );
-        $('#'+slot+'info').append(
+        slotInfo.append(
             '<table>'+
             '<thead>'+
-            '<tr><th colspan="6">' + pokemon.name + "'s Individual Values</th></tr>"+
+            '<tr><th colspan="6">Individual Values</th></tr>'+
             '<tr><th>HP</th><th>Atk</th><th>Def</th><th>Spd</th><th>Spcl Atk</th><th>Spcl Def</th></tr>'+
             '<tbody><tr>'+
-            '<tr>'+
             '<td>' + pokemon.iv.hp + '</td>'+
             '<td>' + pokemon.iv.attack + '</td>'+
             '<td>' + pokemon.iv.defence + '</td>'+
             '<td>' + pokemon.iv.speed + '</td>'+
             '<td>' + pokemon.iv.spcl_atk + '</td>'+
             '<td>' + pokemon.iv.spcl_def + '</td>'+
-            '</tr>'+
             '</tr></tbody>'+
             '</thead>'+
             '</table>'
         );
         unsafeWindow.pokeTeam[slot] = pokemon;
-        $('#'+slot+'info').addClass('hidden');
+        slotInfo.addClass('hidden');
         $('#'+slot+' .i-pencil-edit').click(pokeUI.editSkills);
     }
 
@@ -174,14 +193,22 @@
                 if (txt) {
                     // Parse data, this is ugly but there isn't any specific classes or id's in the table
                     if (txt.includes('Name: ')) {
-                        pokemon.name = txt.split('Name: ')[1].split(' (')[0];
+                        var name = txt.split('Name: ')[1].split(' (');
+                        if (name.length > 1) {
+                            pokemon.nickname = name[0];
+                            pokemon.name = name[1].slice(0, -1);
+                        } else {
+                            pokemon.nickname = false;
+                            pokemon.name = name[0];
+                        }
+                        pokemon.display_name = pokemon.nickname || pokemon.name;
                     } else if (txt.includes('Level: ')) {
                         pokemon.level = txt.split('Level: ')[1];
                     } else if (txt.includes('Health: ')) {
                         var hp = txt.split('Health: ')[1].split(' / ');
                         pokemon.hp = parseInt(hp[0]);
                         pokemon.max_hp = parseInt(hp[1]);
-                        pokemon.hp_pct = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
+                        pokemon.hp_pcnt = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
                     }
                 }
                 // HP   Attack  Defence     Speed   Special Attack  Special Defence
