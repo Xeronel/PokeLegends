@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PokeLegends UI
 // @namespace    pokecrap
-// @version      1.8
+// @version      1.9
 // @description  Pokemon Party UI
 // @author       Ripster
 // @match        https://www.pokemonlegends.com/explore*
@@ -92,13 +92,13 @@
             '</div>'+
             '<div id="poke-lvl">' + 'Lv.' + pokemon.level + '</div>'+
             '<div id="hp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.hp_pcnt + ';">'+
-            '<div id="pokemon-hp" class="progress-text">' + pokemon.hp_pcnt + '</div>'+
+            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + Math.min(pokemon.hp_pcnt, 100) + '%;">'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.hp_pcnt + '%</div>'+
             '</div>'+
             '</div>'+
             '<div id="exp-bar" class="mws-progressbar-exp ui-progressbar ui-widget ui-wdiget-content ui-corner-all" role="progressbar">'+
-            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + pokemon.exp_pcnt + ';">'+
-            '<div id="pokemon-hp" class="progress-text">' + pokemon.exp_pcnt + '</div>'+
+            '<div class="ui-progressbar-value ui-widget-header ui-corner-all" style="width: ' + Math.min(pokemon.exp_pcnt, 100) + '%;">'+
+            '<div id="pokemon-hp" class="progress-text">' + pokemon.exp_pcnt + '%</div>'+
             '</div>'+
             '</div>'
         );
@@ -174,7 +174,7 @@
             // Get exp percent
             var re = /expbar"\)\.innerText\s=\s(.+)\s\+\s"\/"\s\+\s(.*);/;
             var expBar = re.exec(data);
-            pokemon.exp_pcnt = Math.round(parseInt(expBar[1])/parseInt(expBar[2])*100) + '%';
+            pokemon.exp_pcnt = Math.round(parseInt(expBar[1])/parseInt(expBar[2])*100);
             pokemon.exp = expBar[1];
             pokemon.max_exp = expBar[2];
 
@@ -208,7 +208,7 @@
                         var hp = txt.split('Health: ')[1].split(' / ');
                         pokemon.hp = parseInt(hp[0]);
                         pokemon.max_hp = parseInt(hp[1]);
-                        pokemon.hp_pcnt = Math.round(pokemon.hp / pokemon.max_hp * 100) + '%';
+                        pokemon.hp_pcnt = Math.round(pokemon.hp / pokemon.max_hp * 100);
                     }
                 }
                 // HP   Attack  Defence     Speed   Special Attack  Special Defence
